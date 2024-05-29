@@ -165,26 +165,30 @@ function displayResult(routes, subscription) {
 
   for (const route of routes) {
 
-    let storeRouteObj = route;
+    let storeRObj = route;
 
-    let isCheck = searchRoute(subscription, storeRouteObj.name);
+    let isCheck = searchRoute(subscription, storeRObj.name);
 
     if (!isCheck) {
-      if (storeRouteObj.subComp) delete storeRouteObj.subComp;
-      storeRouteObj.comp = 'UN';
-      resultArr.push(storeRouteObj);
+      if (storeRObj.subComp) delete storeRObj.subComp;
+      storeRObj.comp = 'UN';
+      resultArr.push(storeRObj);
     } 
     else {
       let flag = 0;
+
       let redirection;
-      if (searchRoute(subscription, storeRouteObj.name)) {
-        redirection = storeRouteObj.name;
+
+      if (searchRoute(subscription, storeRObj.name)) {
+
+        redirection = storeRObj.name;
+
         flag = 1;
       }
 
-      if (storeRouteObj.subComp) {
+      if (storeRObj.subComp) {
 
-        for (const p of storeRouteObj.subComp) {
+        for (const p of storeRObj.subComp) {
           if (searchRoute(subscription, p.name)) {
             redirection = p.name;
             flag = 1;
@@ -192,11 +196,11 @@ function displayResult(routes, subscription) {
           if (!searchRoute(subscription, p.name)) p.comp = 'UN';
         }
       }
-      if (flag == 1 && storeRouteObj.subComp)
-        storeRouteObj.subComp.unshift({ redirectTo: redirection });
+      if (flag == 1 && storeRObj.subComp)
+        storeRObj.subComp.unshift({ redirectTo: redirection });
       else if (flag == 1) resultArr.push({ redirectTo: redirection });
 
-      resultArr.push(storeRouteObj);
+      resultArr.push(storeRObj);
     }
   }
 }
