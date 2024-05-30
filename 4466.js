@@ -65,10 +65,10 @@ const routes = [
   },
 ];
 
-const subscription = [
+const subscription = [//{redirectTO: M5} 
   {
     name: 'M1',
-    isSub: true,
+    isSub: false,
   },
   {
     name: 'M2',
@@ -80,7 +80,7 @@ const subscription = [
     subMod: [
       {
         name: 'M3A',
-        isSub: true,
+        isSub: false,
       },
       {
         name: 'M3B',
@@ -105,15 +105,15 @@ const subscription = [
   {
     name: 'M5',
     isSub: true,
-    subMod: [
+    subMod: [//{redirectTO: M5A} 
       {
         name: 'M5A',
-        isSub: false,
+        isSub: true,
       },
       {
         name: 'M5B',
         isSub: true,
-        subComp: [
+        subComp: [ // {redirectTO: M5BB} 
           {
             name: 'M5BA',
             isSub: false,
@@ -139,18 +139,22 @@ const subscription = [
 var resultArr = [];
 
 function searchRoute(subscription, Name) {
+
   for (const subs of subscription) {
+
     if (subs.name == Name && subs.isSub === true) {
       return true;
     }
 
     if (subs.subMod) {
+
       for (const sub of subs.subMod) {
         if (sub.name == Name && sub.isSub === true) return true;
       }
     }
 
     if (subs.subComp) {
+      
       for (const sub of subs.subComp) {
         if (sub.name == Name && sub.isSub === true) return true;
       }
@@ -170,8 +174,11 @@ function displayResult(routes, subscription) {
     let isCheck = searchRoute(subscription, storeRObj.name);
 
     if (!isCheck) {
+
       if (storeRObj.subComp) delete storeRObj.subComp;
+
       storeRObj.comp = 'UN';
+
       resultArr.push(storeRObj);
     } 
     else {
@@ -189,15 +196,20 @@ function displayResult(routes, subscription) {
       if (storeRObj.subComp) {
 
         for (const p of storeRObj.subComp) {
+
           if (searchRoute(subscription, p.name)) {
+
             redirection = p.name;
+
             flag = 1;
           }
           if (!searchRoute(subscription, p.name)) p.comp = 'UN';
         }
       }
       if (flag == 1 && storeRObj.subComp)
+
         storeRObj.subComp.unshift({ redirectTo: redirection });
+
       else if (flag == 1) resultArr.push({ redirectTo: redirection });
 
       resultArr.push(storeRObj);
